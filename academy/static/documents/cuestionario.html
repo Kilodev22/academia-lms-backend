@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario de Lógica - Distrito Capital</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Puro -->
+    <style>
+        /* --- Variables y Estilos Base --- */
+        :root {
+            --color-bg: #f8fafc;
+            --color-text-primary: #1e293b;
+            --color-text-secondary: #475569;
+            --color-text-title: #0f172a;
+            --color-white: #ffffff;
+            --color-border: #e2e8f0;
+            --color-primary: #2563eb;
+            --color-primary-hover: #1d4ed8;
+            --color-correct-bg: #dcfce7;
+            --color-correct-border: #4ade80;
+            --color-incorrect-bg: #fee2e2;
+            --color-incorrect-border: #f87171;
+            --color-justification-bg: #eff6ff;
+            --color-justification-border: #bfdbfe;
+            --color-justification-text: #1e40af;
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --border-radius-md: 0.5rem;
+            --border-radius-lg: 1rem;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- Contenedor Principal --- */
+        .main-container {
+            max-width: 56rem; /* Equivalente a max-w-4xl */
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* --- Encabezado --- */
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .quiz-header h1 {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700;
+            color: var(--color-text-title);
+            margin: 0;
+        }
+        .quiz-header p {
+            font-size: 1.125rem; /* text-lg */
+            color: var(--color-text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* --- Contenedor de Resultados --- */
+        .results-box {
+            background-color: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            color: #1d4ed8;
+            padding: 1rem;
+            border-radius: var(--border-radius-md);
+            margin-bottom: 2rem;
+        }
+        .results-box.hidden {
+            display: none;
+        }
+        .results-box p {
+            margin: 0;
+        }
+        .results-box .font-bold {
+            font-weight: 700;
+        }
+
+        /* --- Contenedor del Cuestionario --- */
+        .quiz-form-container {
+            background-color: var(--color-white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+        .quiz-form-container > div:not(:last-child) {
+            margin-bottom: 2rem; /* space-y-8 */
+        }
+        
+        /* --- Estilos de Preguntas y Opciones --- */
+        .question-block > *:not(:last-child) {
+             margin-bottom: 0.75rem; /* space-y-3 */
+        }
+        .question-text {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600; /* font-semibold */
+            color: var(--color-text-title);
+        }
+        .options-group > div:not(:last-child) {
+            margin-bottom: 0.5rem; /* space-y-2 */
+        }
+        .option-label {
+            display: block;
+            padding: 0.75rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .option-label:hover {
+            background-color: #f1f5f9; /* hover:bg-slate-100 */
+        }
+        .option-label input {
+            margin-right: 0.5rem;
+        }
+
+        /* --- Estilos de Justificación y Resultados de Opción --- */
+        .justification-box {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background-color: var(--color-justification-bg);
+            border: 1px solid var(--color-justification-border);
+            color: var(--color-justification-text);
+            border-radius: var(--border-radius-md);
+            font-size: 0.875rem; /* text-sm */
+        }
+        .justification-box.hidden {
+            display: none;
+        }
+        
+        /* Clases para JavaScript */
+        .option-label.correct {
+            background-color: var(--color-correct-bg);
+            border-color: var(--color-correct-border);
+        }
+        .option-label.incorrect {
+            background-color: var(--color-incorrect-bg);
+            border-color: var(--color-incorrect-border);
+        }
+
+        /* --- Botón de Enviar --- */
+        .submit-button-container {
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+        }
+        .submit-button {
+            width: 100%;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .submit-button:hover {
+            background-color: var(--color-primary-hover);
+        }
+        .submit-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px #93c5fd; /* focus:ring-4 focus:ring-blue-300 */
+        }
+
+        /* --- Media Queries para Responsividad --- */
+        @media (min-width: 640px) { /* sm: */
+            .main-container { padding: 1.5rem; }
+            .quiz-header h1 { font-size: 2.25rem; } /* sm:text-4xl */
+            .quiz-form-container { padding: 2rem; }
+        }
+        @media (min-width: 768px) { /* md: */
+            .main-container { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <header class="quiz-header">
+            <h1>Cuestionario de Lógica</h1>
+            <p>Distrito Capital de Bogotá - Preparación Examen CNSC</p>
+        </header>
+
+        <div id="results-container" class="results-box hidden" role="alert">
+            <p class="font-bold">Resultados</p>
+            <p id="score-text">Has completado el cuestionario.</p>
+        </div>
+
+        <div id="quiz-container" class="quiz-form-container">
+
+            <!-- Pregunta 1 -->
+            <div id="q1" class="question-block">
+                <p class="question-text">1. ¿Cuál fue el efecto principal de la promulgación de la Constitución Política de 1991 sobre Bogotá, según el texto?</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q1" value="a" class="mr-2"> Confirmó a Gonzalo Jiménez de Quesada como su fundador.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q1" value="b" class="mr-2"> Redujo su autonomía para alinearla con la de los demás municipios.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q1" value="c" class="mr-2"> Le otorgó un marco jurídico especial que reforzó su autonomía.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q1" value="d" class="mr-2"> Inició la planificación para la construcción del sistema TransMilenio.</label></div>
+                </div>
+                <div id="justification-q1" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 2 -->
+            <div id="q2" class="question-block">
+                <p class="question-text">2. ¿Cuál es la relación lógica entre el Artículo 322 de la Constitución y el Decreto-Ley 1421 de 1993?</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q2" value="a"> El Decreto-Ley 1421 es una norma superior que corrige el Artículo 322.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q2" value="b"> El Artículo 322 establece el principio (régimen especial), y el Decreto-Ley 1421 lo implementa en detalle (organización y funcionamiento).</label></div>
+                    <div><label class="option-label"><input type="radio" name="q2" value="c"> Ambos documentos se contradicen y generan un conflicto legal.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q2" value="d"> El Artículo 322 se refiere a la historia y el Decreto-Ley 1421 a la gestión moderna.</label></div>
+                </div>
+                <div id="justification-q2" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 3 -->
+            <div id="q3" class="question-block">
+                <p class="question-text">3. El texto afirma que la autonomía del Distrito Capital "se ejerce en armonía con la legislación nacional". ¿Qué se puede deducir de esta frase?</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q3" value="a"> La autonomía de Bogotá es ilimitada y absoluta.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q3" value="b"> Las leyes del Distrito Capital tienen la capacidad de anular las leyes nacionales.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q3" value="c"> Las facultades de autogobierno de Bogotá están enmarcadas y deben respetar las leyes de la República.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q3" value="d"> La legislación nacional controla directamente todas las decisiones de la Alcaldía Mayor.</label></div>
+                </div>
+                <div id="justification-q3" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 4 -->
+            <div id="q4" class="question-block">
+                <p class="question-text">4. La existencia de un "Estatuto Orgánico" es la consecuencia directa de que Bogotá posea:</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q4" value="a"> Una larga historia que se remonta a 1538.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q4" value="b"> Un régimen especial que requiere una norma propia para definir su arquitectura administrativa.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q4" value="c"> Grandes megaproyectos de movilidad en ejecución.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q4" value="d"> Una ubicación geográfica central en el país.</label></div>
+                </div>
+                <div id="justification-q4" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 5 -->
+            <div id="q5" class="question-block">
+                <p class="question-text">5. ¿Cuál es la relación jerárquica que se describe en la sección 4 del texto?</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q5" value="a"> El Plan de Desarrollo Distrital está por encima de la Alcaldía Mayor.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q5" value="b"> La Alcaldía Mayor se presenta como la máxima autoridad del Gobierno Distrital.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q5" value="c"> El sistema TransMilenio dirige las acciones de la Alcaldía Mayor.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q5" value="d"> La gestión pública es superior a la autoridad política de la Alcaldía.</label></div>
+                </div>
+                <div id="justification-q5" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 6 -->
+            <div id="q6" class="question-block">
+                <p class="question-text">6. Se puede inferir que el Plan de Desarrollo Distrital (PDD) es una herramienta de:</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q6" value="a"> Recopilación histórica.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q6" value="b"> Planificación y dirección estratégica.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q6" value="c"> Legislación constitucional.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q6" value="d"> Recaudación de tributos.</label></div>
+                </div>
+                <div id="justification-q6" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 7 -->
+            <div id="q7" class="question-block">
+                <p class="question-text">7. La "transformación significativa" que representó la Constitución de 1991 se debió a que:</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q7" value="a"> Cambió la capital del Virreinato.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q7" value="b"> Permitió a Bogotá tener un mayor grado de autogestión frente al poder central y departamental.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q7" value="c"> Definió por primera vez a Gonzalo Jiménez de Quesada como el fundador.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q7" value="d"> Detalló el funcionamiento de la Alcaldía Mayor.</label></div>
+                </div>
+                <div id="justification-q7" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 8 -->
+            <div id="q8" class="question-block">
+                <p class="question-text">8. Si el Artículo 287 de la Constitución "ampara la autonomía de las entidades territoriales", este artículo funciona como:</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q8" value="a"> Una excepción que solo aplica a Bogotá.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q8" value="b"> Un soporte o fundamento constitucional para la autonomía que se describe en la sección 3.1.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q8" value="c"> Una norma que limita la capacidad de Bogotá para recaudar tributos.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q8" value="d"> Un artículo que regula exclusivamente la historia de las entidades territoriales.</label></div>
+                </div>
+                <div id="justification-q8" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 9 -->
+            <div id="q9" class="question-block">
+                <p class="question-text">9. La capacidad de "estructurar su propia administración" y "planificar y ejecutar su propio desarrollo" son manifestaciones de la:</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q9" value="a"> Dependencia de Bogotá del poder departamental.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q9" value="b"> Autonomía administrativa reforzada del Distrito Capital.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q9" value="c"> Historia de Bogotá como capital del Virreinato.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q9" value="d"> Guía establecida por el sistema TransMilenio.</label></div>
+                </div>
+                <div id="justification-q9" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 10 -->
+            <div id="q10" class="question-block">
+                <p class="question-text">10. ¿Cuál es la función primordial de la Alcaldía Mayor según el texto?</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q10" value="a"> Escribir el Estatuto Orgánico de Bogotá.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q10" value="b"> Investigar la historia del Virreinato del Nuevo Reino de Granada.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q10" value="c"> Dirigir la gestión pública del Distrito Capital.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q10" value="d"> Diseñar y construir personalmente los megaproyectos de movilidad.</label></div>
+                </div>
+                <div id="justification-q10" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 11 -->
+            <div id="q11" class="question-block">
+                <p class="question-text">11. El texto establece una clara distinción entre dos hitos históricos: 1538 y 1991. Lógicamente, 1538 representa el origen __________, mientras que 1991 representa el origen __________.</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q11" value="a"> jurídico / administrativo.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q11" value="b"> fundacional / jurídico-administrativo.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q11" value="c"> político / económico.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q11" value="d"> administrativo / fundacional.</label></div>
+                </div>
+                <div id="justification-q11" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 12 -->
+            <div id="q12" class="question-block">
+                <p class="question-text">12. La ejecución de la construcción del metro es presentada en el texto como un "ejemplo palpable" del:</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q12" value="a"> Régimen especial de la ciudad.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q12" value="b"> Liderazgo y la capacidad de gestión de la Alcaldía Mayor.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q12" value="c"> Contenido del Decreto-Ley 1421 de 1993.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q12" value="d"> Legado de la época del Virreinato.</label></div>
+                </div>
+                <div id="justification-q12" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 13 -->
+            <div id="q13" class="question-block">
+                <p class="question-text">13. Si el "Estatuto Orgánico" define la arquitectura administrativa, se puede inferir que este documento es crucial para entender:</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q13" value="a"> Las razones de la fundación de Bogotá en 1538.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q13" value="b"> Cómo se organizan y qué funciones tienen las diferentes entidades que componen el gobierno de la ciudad.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q13" value="c"> Los detalles técnicos de la expansión de TransMilenio.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q13" value="d"> La biografía de Gonzalo Jiménez de Quesada.</label></div>
+                </div>
+                <div id="justification-q13" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 14 -->
+            <div id="q14" class="question-block">
+                <p class="question-text">14. ¿Cuál de las siguientes afirmaciones es una conclusión lógica derivada del texto?</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q14" value="a"> Antes de 1991, Bogotá no tenía ninguna importancia política o administrativa.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q14" value="b"> La estructura administrativa de Bogotá es idéntica a la de cualquier otro municipio de Colombia.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q14" value="c"> La condición de Distrito Capital es un estatus jurídico que le concede herramientas de autogobierno.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q14" value="d"> El Plan de Desarrollo Distrital es un documento que se elabora sin la intervención de la Alcaldía Mayor.</label></div>
+                </div>
+                <div id="justification-q14" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 15 -->
+            <div id="q15" class="question-block">
+                <p class="question-text">15. La frase "La Alcaldía Mayor se erige como la máxima autoridad administrativa y política" implica que:</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q15" value="a"> No hay otras autoridades en el Distrito.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q15" value="b"> Sus decisiones están por encima de la Constitución Nacional.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q15" value="c"> Ocupa la posición más alta en la estructura de poder del gobierno de la ciudad.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q15" value="d"> Su poder es únicamente simbólico.</label></div>
+                </div>
+                <div id="justification-q15" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 16 -->
+            <div id="q16" class="question-block">
+                <p class="question-text">16. Para entender la autonomía de TODAS las entidades territoriales de Colombia, incluido Bogotá, ¿qué artículo mencionado en el texto se debería consultar?</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q16" value="a"> Artículo 322.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q16" value="b"> Artículo 287.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q16" value="c"> El Decreto-Ley 1421 de 1993.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q16" value="d"> El Plan de Desarrollo Distrital.</label></div>
+                </div>
+                <div id="justification-q16" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 17 -->
+            <div id="q17" class="question-block">
+                <p class="question-text">17. El texto sugiere que la historia de Bogotá como centro político:</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q17" value="a"> Comenzó recientemente con la construcción del metro.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q17" value="b"> Es una característica de larga data, que se remonta a la época del Virreinato.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q17" value="c"> Es menos relevante que su capacidad para tener un Estatuto Orgánico.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q17" value="d"> Fue interrumpida y solo se recuperó con la Constitución de 1991.</label></div>
+                </div>
+                <div id="justification-q17" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 18 -->
+            <div id="q18" class="question-block">
+                <p class="question-text">18. ¿Qué concepto es la causa que da origen a la necesidad de un "Estatuto Orgánico"?</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q18" value="a"> La fundación en 1538.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q18" value="b"> El "régimen especial".</label></div>
+                    <div><label class="option-label"><input type="radio" name="q18" value="c"> La construcción de TransMilenio.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q18" value="d"> La figura de Gonzalo Jiménez de Quesada.</label></div>
+                </div>
+                <div id="justification-q18" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 19 -->
+            <div id="q19" class="question-block">
+                <p class="question-text">19. De acuerdo con el texto, el poder de la Alcaldía Mayor para dirigir la gestión pública se ejerce siguiendo una guía. ¿Cuál es esa guía?</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q19" value="a"> Las referencias normativas históricas.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q19" value="b"> Las opiniones del poder departamental.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q19" value="c"> Los objetivos y estrategias plasmados en el Plan de Desarrollo Distrital (PDD).</label></div>
+                    <div><label class="option-label"><input type="radio" name="q19" value="d"> Las recomendaciones de los constructores de los megaproyectos.</label></div>
+                </div>
+                <div id="justification-q19" class="justification-box hidden"></div>
+            </div>
+
+            <!-- Pregunta 20 -->
+            <div id="q20" class="question-block">
+                <p class="question-text">20. Sintetizando la información, el estatus actual de Bogotá como Distrito Capital es el resultado de:</p>
+                <div class="options-group">
+                    <div><label class="option-label"><input type="radio" name="q20" value="a"> Una evolución histórica que culminó en un reconocimiento constitucional específico en 1991.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q20" value="b"> Una decisión unilateral tomada por la Alcaldía Mayor.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q20" value="c"> Exclusivamente de su rol como centro político durante el Virreinato.</label></div>
+                    <div><label class="option-label"><input type="radio" name="q20" value="d"> La necesidad de ejecutar proyectos de movilidad a gran escala.</label></div>
+                </div>
+                <div id="justification-q20" class="justification-box hidden"></div>
+            </div>
+
+            <div class="submit-button-container">
+                <button type="button" id="submit-btn" class="submit-button">
+                    Revisar Respuestas
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const correctAnswers = {
+                q1: 'c', q2: 'b', q3: 'c', q4: 'b', q5: 'b', q6: 'b', q7: 'b', q8: 'b', q9: 'b', q10: 'c',
+                q11: 'b', q12: 'b', q13: 'b', q14: 'c', q15: 'c', q16: 'b', q17: 'b', q18: 'b', q19: 'c', q20: 'a'
+            };
+
+            const justifications = {
+                q1: '<b>Justificación:</b> La Constitución de 1991, en su Artículo 322, es el hito que instituye a Bogotá como Distrito Capital con un régimen especial, lo que le confirió una mayor autonomía. Las otras opciones son incorrectas o no son el efecto principal descrito.',
+                q2: '<b>Justificación:</b> El Artículo 322 es el mandato constitucional (el "qué"), mientras que el Decreto-Ley 1421 es el desarrollo normativo que detalla cómo se aplica ese mandato (el "cómo").',
+                q3: '<b>Justificación:</b> La frase implica que la autonomía no es absoluta. Bogotá tiene autogobierno, pero siempre dentro de los límites y principios establecidos por el marco legal superior de Colombia.',
+                q4: '<b>Justificación:</b> El texto vincula directamente el "régimen especial" con la existencia de un "Estatuto Orgánico", que es la norma que desarrolla y define la arquitectura de dicho régimen.',
+                q5: '<b>Justificación:</b> El texto es explícito al afirmar que "La Alcaldía Mayor se erige como la máxima autoridad administrativa y política", situándola en la cima de la jerarquía del gobierno distrital.',
+                q6: '<b>Justificación:</b> El texto indica que la gestión de la Alcaldía Mayor es "guiada por los objetivos y estrategias plasmados en el Plan de Desarrollo Distrital (PDD)", definiéndolo como un instrumento de planificación.',
+                q7: '<b>Justificación:</b> El texto señala que la "transformación significativa" consistió en que le permitió a Bogotá "alcanzar una mayor autonomía frente a las dinámicas del poder central y departamental".',
+                q8: '<b>Justificación:</b> El texto presenta el Artículo 287 como "Referencia Normativa de Soporte", lo que significa que provee la base constitucional general para la autonomía que se le reconoce a Bogotá.',
+                q9: '<b>Justificación:</b> Estas capacidades son ejemplos directos de la "Autonomía Administrativa Reforzada", título de la sección donde se describen.',
+                q10: '<b>Justificación:</b> El texto establece que la "función primordial" de la Alcaldía Mayor es "la dirección de la gestión pública".',
+                q11: '<b>Justificación:</b> 1538 es la fecha de fundación de la ciudad, su origen físico. 1991 es la fecha de la Constitución que le da su estatus legal y administrativo especial como Distrito Capital.',
+                q12: '<b>Justificación:</b> El texto usa la construcción del metro como un "ejemplo palpable" del "liderazgo" de la Alcaldía Mayor en la ejecución de megaproyectos.',
+                q13: '<b>Justificación:</b> El texto afirma que el Estatuto Orgánico "define su arquitectura administrativa", por lo tanto, es el documento clave para entender la organización y funciones del gobierno de la ciudad.',
+                q14: '<b>Justificación:</b> Esta opción sintetiza la idea central del texto: que ser Distrito Capital es un estatus legal especial que le otorga autonomía. Las otras opciones son incorrectas o contradicen la información.',
+                q15: '<b>Justificación:</b> En una estructura jerárquica, ser la "máxima autoridad" significa ocupar la posición más alta de poder y dirección, en este caso, dentro del Gobierno Distrital.',
+                q16: '<b>Justificación:</b> El texto especifica que el Artículo 287 "ampara la autonomía de las entidades territoriales, incluido el Distrito Capital", lo que lo convierte en la norma general para todas.',
+                q17: '<b>Justificación:</b> El texto traza este rol hasta sus inicios, cuando se convirtió en "la capital del Virreinato del Nuevo Reino de Granada", demostrando que es una característica histórica.',
+                q18: '<b>Justificación:</b> La causa es el "régimen especial" otorgado por la Constitución. Un régimen tan particular necesita una ley propia (un Estatuto Orgánico) que lo desarrolle y regule.',
+                q19: '<b>Justificación:</b> El texto afirma explícitamente que la dirección de la Alcaldía Mayor es "guiada por los objetivos y estrategias plasmados en el Plan de Desarrollo Distrital (PDD)".',
+                q20: '<b>Justificación:</b> El texto describe un proceso que inicia con la fundación ("evolución histórica") y llega a un punto clave con la Constitución de 1991 ("reconocimiento constitucional específico").'
+            };
+
+            const quizContainer = document.getElementById('quiz-container');
+            const submitBtn = document.getElementById('submit-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const scoreText = document.getElementById('score-text');
+
+            submitBtn.addEventListener('click', function() {
+                let score = 0;
+                const totalQuestions = Object.keys(correctAnswers).length;
+
+                for (const questionId in correctAnswers) {
+                    const correctAnswer = correctAnswers[questionId];
+                    const userAnswerInput = quizContainer.querySelector(`input[name="${questionId}"]:checked`);
+                    const questionDiv = document.getElementById(questionId);
+                    const options = questionDiv.querySelectorAll('.option-label');
+                    const justificationDiv = document.getElementById(`justification-${questionId}`);
+
+                    // Resetear estilos previos
+                    options.forEach(label => {
+                        label.classList.remove('correct', 'incorrect');
+                    });
+                    
+                    // Marcar la respuesta correcta en verde
+                    const correctLabel = questionDiv.querySelector(`input[value="${correctAnswer}"]`).parentElement;
+                    correctLabel.classList.add('correct');
+
+                    if (userAnswerInput) {
+                        const userAnswer = userAnswerInput.value;
+                        if (userAnswer === correctAnswer) {
+                            score++;
+                        } else {
+                            // Marcar la respuesta incorrecta del usuario en rojo
+                            const wrongLabel = userAnswerInput.parentElement;
+                            wrongLabel.classList.add('incorrect');
+                        }
+                    }
+                    
+                    // Mostrar la justificación
+                    if (justificationDiv) {
+                        justificationDiv.innerHTML = justifications[questionId];
+                        justificationDiv.classList.remove('hidden');
+                    }
+                }
+
+                // Mostrar el puntaje final
+                scoreText.textContent = `Tu puntaje es: ${score} de ${totalQuestions} respuestas correctas.`;
+                resultsContainer.classList.remove('hidden');
+
+                // Hacer scroll hacia el contenedor de resultados
+                resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+
+</body>
+</html>

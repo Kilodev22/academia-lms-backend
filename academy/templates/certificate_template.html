@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificado</title>
+    <style>
+        /* --- ¡AQUÍ ESTÁ LA NUEVA REGLA MÁGICA! --- */
+        @page {
+            size: A4 landscape; /* Define el tamaño A4 y la orientación horizontal */
+            margin: 0; /* Elimina los márgenes de impresión por defecto */
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            /* Pequeño ajuste para centrar perfectamente en la nueva orientación */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .certificate-container {
+            width: 95%; /* Usamos porcentaje para que se ajuste al tamaño A4 landscape */
+            height: 90%;
+            background-color: #f7f6f1;
+            border: 15px solid #2c3e50;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABYSURBVHhe7cEBAQAAAIIg/69uSEABAAAAAAAAAAAAAAAAMJcAAAAAAAAAAAAAAADg1gAAAAAAAAAAAAAAAOBWAAAAAAAAAAAAAADA7QMIWAMA5rI2DQAAAABJRU5ErkJggg==');
+        }
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .subtitle {
+            font-size: 20px;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        .student-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 40px;
+            font-weight: bold;
+            color: #0056b3;
+            border-bottom: 2px solid #2c3e50;
+            display: inline-block;
+            padding-bottom: 5px;
+            margin: 15px 0;
+        }
+        .course-name {
+            font-size: 24px;
+            font-style: italic;
+            color: #34495e;
+            margin: 15px 0;
+        }
+        .date {
+            margin-top: 40px;
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate-container">
+        <h1 class="title">Certificado de Finalización</h1>
+        <p class="subtitle">Otorgado a:</p>
+        <h2 class="student-name">{{ student_name }}</h2>
+        <p class="subtitle">Por haber completado exitosamente el curso:</p>
+        <h3 class="course-name">{{ course_name }}</h3>
+        <p class="date">Emitido el: {{ issue_date }}</p>
+    </div>
+</body>
+</html>

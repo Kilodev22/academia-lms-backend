@@ -1,0 +1,18 @@
+# Entorno Virtual
+# Ignora la carpeta del entorno virtual para no subir miles de archivos de librerías.
+venv/
+.venv/
+
+# Archivo de variables de entorno
+# ¡CRÍTICO! Nunca subir este archivo a un repositorio público.
+.env
+
+# Archivos de caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Carpetas de IDEs y Editores de Código
+.vscode/
+.idea/
