@@ -16,7 +16,14 @@ from weasyprint import HTML, CSS
 try:
     locale.setlocale(locale.LC_TIME, 'es_CO.UTF-8')
 except locale.Error:
-    locale.setlocale(locale.LC_TIME, 'Spanish_Colombia')
+    try:
+        # Opción de fallback para sistemas Windows
+        locale.setlocale(locale.LC_TIME, 'Spanish_Colombia')
+    except locale.Error:
+        # Si todo falla, usa el locale por defecto del sistema y registra un aviso
+        print("Advertencia: No se pudo establecer el locale a 'es_CO.UTF-8'. Las fechas podrían no mostrarse en español.")
+        pass # La aplicación continuará ejecutándose con el idioma por defecto del sistema
+    
 
 main_routes = Blueprint('main', __name__)
 
