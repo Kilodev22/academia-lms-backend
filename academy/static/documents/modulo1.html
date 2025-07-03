@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Estudio Integral CNSC: Distrito Capital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            transition: all 0.3s ease-in-out;
+        }
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            transform: translateY(-5px);
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+        h1 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #1e293b;
+            font-size: 3rem;
+            font-weight: 800;
+        }
+        h2 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 2.25rem;
+            font-weight: 700;
+            border-bottom: 3px solid;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        h3 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #334155;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        p, li {
+            font-family: 'Roboto', 'sans-serif';
+            color: #475569;
+            line-height: 1.7;
+        }
+        .module-header-1 { color: #1d4ed8; border-color: #60a5fa; }
+        .module-header-2 { color: #047857; border-color: #34d399; }
+        .module-header-3 { color: #7e22ce; border-color: #a855f7; }
+        .module-header-4 { color: #0369a1; border-color: #38bdf8; }
+        .module-header-5 { color: #c2410c; border-color: #fb923c; }
+
+        .analysis-box {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.875rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+        }
+        .analysis-box-1 { background-color: #eff6ff; color: #1e40af; }
+        .analysis-box-2 { background-color: #f0fdf4; color: #166534; }
+        .analysis-box-3 { background-color: #f5f3ff; color: #5b21b6; }
+        .analysis-box-4 { background-color: #ecfeff; color: #0891b2; }
+        .analysis-box-5 { background-color: #fff7ed; color: #9a3412; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-7xl mx-auto">
+
+        <header class="text-center my-12">
+            <h1>Guía de Estudio Integral CNSC: Distrito Capital</h1>
+            <p class="mt-2 text-lg">Un recorrido visual e interactivo por la estructura, funciones y competencias de Bogotá D.C.</p>
+        </header>
+
+        <div id="module-1">
+            <h2 class="module-header-1">Fundamentos y Naturaleza Jurídica</h2>
+            <main>
+                <section class="card">
+                    <h3 class="mb-4">¿Qué es el Distrito Capital?</h3>
+                    <p class="mb-4">Bogotá, Distrito Capital, es la entidad territorial más importante de Colombia. Su estatus es único y se diferencia de los municipios y departamentos, otorgándole una autonomía administrativa y financiera superior. No es solo el centro político del país, sino también el principal motor económico, cultural y social, jugando un rol estratégico en el progreso nacional.</p>
+                    <div class="flex flex-col md:flex-row justify-around items-center py-8">
+                        <div class="text-center w-full md:w-1/4 p-4 m-2 bg-blue-50 border-2 border-blue-200 rounded-lg">
+                            <h4 class="font-bold text-blue-800">Municipio Tradicional</h4>
+                            <p class="text-sm mt-2">Integrado y subordinado a un Departamento.</p>
+                        </div>
+                        <div class="text-4xl font-bold text-blue-300 my-4 md:my-0">&ne;</div>
+                        <div class="text-center w-full md:w-1/3 p-4 m-2 bg-blue-100 border-2 border-blue-400 rounded-lg shadow-lg">
+                            <h4 class="font-bold text-blue-900">Distrito Capital</h4>
+                            <p class="text-sm mt-2">Entidad autónoma que ejerce competencias de Municipio y Departamento.</p>
+                        </div>
+                        <div class="text-4xl font-bold text-blue-300 my-4 md:my-0">&ne;</div>
+                        <div class="text-center w-full md:w-1/4 p-4 m-2 bg-blue-50 border-2 border-blue-200 rounded-lg">
+                             <h4 class="font-bold text-blue-800">Departamento</h4>
+                            <p class="text-sm mt-2">Agrupa y coordina a los municipios de su jurisdicción.</p>
+                        </div>
+                    </div>
+                    <p class="analysis-box analysis-box-1">
+                        <strong>Análisis del Aspirante:</strong> La clave es comprender la <strong>dualidad funcional</strong> de Bogotá. Al responder preguntas, piense en el Distrito como una entidad que no tiene un "superior" departamental; se autogestiona en áreas donde otros municipios dependen de su gobernación.
+                    </p>
+                </section>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <section class="card">
+                        <h3 class="mb-4">Evolución Histórica y Pilares de Autonomía</h3>
+                        <p class="mb-4">La consolidación de Bogotá como Distrito Capital en la Constitución de 1991 fue una transformación clave que le otorgó la autonomía que ostenta hoy.</p>
+                        <div class="chart-container" style="height:300px;">
+                            <canvas id="historicalChart"></canvas>
+                        </div>
+                         <p class="analysis-box analysis-box-1">
+                            <strong>Análisis del Aspirante:</strong> Es vital asociar la autonomía de Bogotá directamente con la <strong>Constitución de 1991</strong>. Este evento no fue un simple cambio de nombre, sino una redefinición jurídica que le permitió al Distrito tener un Estatuto Orgánico propio (Decreto-Ley 1421 de 1993).
+                        </p>
+                    </section>
+                    <section class="card">
+                        <h3 class="mb-4">Relevancia Estratégica Nacional</h3>
+                        <p class="mb-4">Bogotá no es solo una capital administrativa; es el centro neurálgico que impulsa al país en múltiples dimensiones.</p>
+                        <ul class="space-y-4 mt-6">
+                            <li class="flex items-start"><div class="flex-shrink-0 h-6 w-6 rounded-full bg-blue-500 text-white flex items-center justify-center mr-3 font-bold">P</div><div><strong>Corazón Político:</strong> Sede del Gobierno Nacional y altas cortes.</div></li>
+                            <li class="flex items-start"><div class="flex-shrink-0 h-6 w-6 rounded-full bg-green-500 text-white flex items-center justify-center mr-3 font-bold">E</div><div><strong>Motor Económico:</strong> Genera más del 25% del PIB de Colombia.</div></li>
+                            <li class="flex items-start"><div class="flex-shrink-0 h-6 w-6 rounded-full bg-yellow-500 text-white flex items-center justify-center mr-3 font-bold">C</div><div><strong>Epicentro Cultural:</strong> Referente por su red de museos, teatros y festivales.</div></li>
+                        </ul>
+                         <p class="analysis-box analysis-box-1">
+                            <strong>Análisis del Aspirante:</strong> Comprender esta triple relevancia (Política, Económica, Cultural) ayuda a contextualizar por qué las políticas y la gestión de Bogotá tienen un impacto que trasciende sus fronteras.
+                        </p>
+                    </section>
+                </div>
+            </main>
+        </div>
+
+        <hr class="my-16 border-t-2 border-gray-200">
+
+        <div id="module-2">
+            <h2 class="module-header-2">El Andamiaje Legal</h2>
+            <main>
+                <section class="card">
+                    <h3 class="mb-4">La Jerarquía de las Normas: La Pirámide Legal</h3>
+                    <p class="mb-6">El funcionamiento del Distrito se rige por un estricto orden jerárquico de normas. Comprender esta pirámide es esencial para identificar la base legal de cualquier acto administrativo distrital.</p>
+                    <div class="flex flex-col items-center">
+                        <div class="w-2/5 p-3 text-center bg-green-200 border-2 border-green-400 rounded-t-lg font-bold">Constitución Política</div>
+                        <div class="w-3/5 p-3 text-center bg-green-100 border-x-2 border-b-2 border-green-300 font-semibold">Decreto-Ley 1421 de 1993 (Estatuto Orgánico)</div>
+                        <div class="w-4/5 p-3 text-center bg-green-100 border-x-2 border-b-2 border-green-300">Leyes Orgánicas y Estatutarias (POT, Participación)</div>
+                        <div class="w-full p-3 text-center bg-green-50 border-x-2 border-b-2 border-green-200 rounded-b-lg text-sm">Planes de Desarrollo y Normativas Específicas</div>
+                    </div>
+                     <p class="analysis-box analysis-box-2">
+                        <strong>Análisis del Aspirante:</strong> En un examen, si una pregunta cuestiona la validez de una acción del Distrito, la respuesta correcta siempre se encontrará verificando si dicha acción se alinea con esta jerarquía. Ninguna norma local puede contradecir al Estatuto Orgánico, y este no puede contradecir a la Constitución.
+                    </p>
+                </section>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <section class="card">
+                        <h3 class="mb-4">Alcance de las Normas Clave</h3>
+                        <p class="mb-4">No todas las leyes tienen el mismo propósito. Este gráfico de radar compara el "enfoque" de las leyes más importantes para el Distrito.</p>
+                        <div class="chart-container" style="height:350px;">
+                            <canvas id="lawsRadarChart"></canvas>
+                        </div>
+                    </section>
+                    <section class="card">
+                        <h3 class="mb-4">Impacto de las Leyes Transversales</h3>
+                        <p class="mb-4">La Ley de Participación y el Estatuto Anticorrupción atraviesan toda la gestión pública y son fundamentales para la democracia y la transparencia.</p>
+                        <div class="chart-container" style="height:350px;">
+                            <canvas id="impactBarChart"></canvas>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+        
+        <hr class="my-16 border-t-2 border-gray-200">
+
+        <div id="module-3">
+            <h2 class="module-header-3">La Estructura Administrativa</h2>
+            <main>
+                 <section class="card">
+                    <h3 class="mb-4">Organigrama General del Distrito</h3>
+                    <p class="mb-6">La administración de Bogotá combina un poder centralizado con operación descentralizada. La Alcaldía Mayor dirige, las Secretarías, Entidades y Localidades ejecutan, y los Organismos de Control vigilan.</p>
+                    <div class="flex flex-col items-center p-4">
+                        <div class="p-3 bg-purple-200 border-2 border-purple-400 rounded-lg font-bold text-purple-800">Alcaldía Mayor de Bogotá</div>
+                        <div class="h-8 w-px bg-purple-300"></div>
+                        <div class="w-full h-px bg-purple-300"></div>
+                        <div class="flex justify-around w-full mt-8">
+                            <div class="text-center"><div class="h-8 w-px bg-purple-300 mx-auto"></div><div class="p-2 bg-purple-100 border border-purple-300 rounded-md">Secretarías</div></div>
+                            <div class="text-center"><div class="h-8 w-px bg-purple-300 mx-auto"></div><div class="p-2 bg-purple-100 border border-purple-300 rounded-md">Entidades Descentralizadas</div></div>
+                            <div class="text-center"><div class="h-8 w-px bg-purple-300 mx-auto"></div><div class="p-2 bg-purple-100 border border-purple-300 rounded-md">Localidades</div></div>
+                            <div class="text-center"><div class="h-8 w-px bg-purple-300 mx-auto"></div><div class="p-2 bg-purple-100 border border-purple-300 rounded-md">Organismos de Control</div></div>
+                        </div>
+                    </div>
+                    <p class="analysis-box analysis-box-3">
+                        <strong>Análisis del Aspirante:</strong> La clave es entender los roles. La <strong>Alcaldía Mayor</strong> dirige. Las <strong>Secretarías</strong> ejecutan políticas sectoriales. Las <strong>Entidades Descentralizadas</strong> (IDRD, EAAB) gestionan servicios con autonomía. Las <strong>Localidades</strong> acercan el gobierno al barrio. Los <strong>Organismos de Control</strong> (Personería, Contraloría) son independientes y vigilan.
+                    </p>
+                </section>
+                 <div class="grid grid-cols-1 lg:grid-cols-5 gap-10">
+                    <section class="card lg:col-span-3">
+                        <h3 class="mb-4">Los Brazos Ejecutores del Gobierno</h3>
+                        <p class="mb-4">Las Secretarías Distritales son el motor de la administración. Cada una se especializa en un sector vital para la ciudad.</p>
+                        <div class="chart-container">
+                            <canvas id="secretariasBarChart"></canvas>
+                        </div>
+                    </section>
+                    <section class="card lg:col-span-2">
+                        <h3 class="mb-4">Centralización vs. Descentralización</h3>
+                        <p class="mb-4">El modelo de Bogotá es una balanza entre un gobierno central que define la estrategia y un gobierno local que la adapta al territorio.</p>
+                        <div class="chart-container">
+                            <canvas id="descentralizacionDoughnutChart"></canvas>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+
+        <hr class="my-16 border-t-2 border-gray-200">
+
+        <div id="module-4">
+            <h2 class="module-header-4">Las Funciones Esenciales</h2>
+            <main>
+                <section class="card">
+                    <h3 class="mb-4">El Espectro de Responsabilidades del Distrito</h3>
+                    <p class="mb-6">Las funciones del Distrito son el conjunto de deberes que la ley le asigna para garantizar el desarrollo integral de la ciudad y el bienestar de sus habitantes, abarcando desde lo administrativo hasta lo social y económico.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="p-4 bg-sky-50 border-l-4 border-sky-400 rounded-r-lg"> <h4 class="font-bold text-sky-800">Administrativas</h4> <p class="text-sm">Organizar la gestión y ejecutar políticas.</p> </div>
+                        <div class="p-4 bg-sky-50 border-l-4 border-sky-400 rounded-r-lg"> <h4 class="font-bold text-sky-800">Sociales</h4> <p class="text-sm">Construir equidad, garantizar salud y educación.</p> </div>
+                        <div class="p-4 bg-sky-50 border-l-4 border-sky-400 rounded-r-lg"> <h4 class="font-bold text-sky-800">Económicas</h4> <p class="text-sm">Fomentar el desarrollo y asegurar autonomía financiera.</p> </div>
+                        <div class="p-4 bg-sky-50 border-l-4 border-sky-400 rounded-r-lg"> <h4 class="font-bold text-sky-800">Ambientales</h4> <p class="text-sm">Proteger ecosistemas y planificar desarrollo sostenible.</p> </div>
+                        <div class="p-4 bg-sky-50 border-l-4 border-sky-400 rounded-r-lg"> <h4 class="font-bold text-sky-800">Seguridad</h4> <p class="text-sm">Mantener el orden público y promover la convivencia.</p> </div>
+                        <div class="p-4 bg-sky-50 border-l-4 border-sky-400 rounded-r-lg"> <h4 class="font-bold text-sky-800">Participación</h4> <p class="text-sm">Fortalecer la democracia local y la voz ciudadana.</p> </div>
+                    </div>
+                    <p class="analysis-box analysis-box-4">
+                        <strong>Análisis del Aspirante:</strong> Para el examen, es crucial entender el <strong>propósito</strong> de cada función. Una pregunta podría ser: "¿Qué función se materializa en el programa de alimentación escolar (PAE)?". La respuesta es la <strong>Función Social</strong>, en su componente de educación.
+                    </p>
+                </section>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <section class="card">
+                        <h3 class="mb-4">Prioridades de la Gestión Pública</h3>
+                        <p class="mb-4">Aunque todas las funciones son importantes, algunas tienen un impacto más directo en la vida diaria. Este gráfico muestra el enfoque en diferentes áreas funcionales.</p>
+                        <div class="chart-container">
+                            <canvas id="functionsPolarChart"></canvas>
+                        </div>
+                    </section>
+                    <section class="card">
+                        <h3 class="mb-4">De la Función a la Acción Concreta</h3>
+                        <p class="mb-4">Las funciones se traducen en acciones a través de las entidades. Este flujo ilustra cómo la "Función de Planeación" se convierte en una realidad.</p>
+                        <div class="space-y-2 mt-4">
+                            <div class="p-2 text-center bg-sky-100 border-2 border-sky-200 rounded-lg"><p class="font-bold text-sky-800">FUNCIÓN:</p><p>Planeación Territorial</p></div>
+                            <div class="text-center text-2xl font-bold text-sky-300">&darr;</div>
+                            <div class="p-2 text-center bg-sky-100 border-2 border-sky-200 rounded-lg"><p class="font-bold text-sky-800">INSTRUMENTO:</p><p>Plan de Ordenamiento (POT)</p></div>
+                            <div class="text-center text-2xl font-bold text-sky-300">&darr;</div>
+                            <div class="p-2 text-center bg-sky-100 border-2 border-sky-200 rounded-lg"><p class="font-bold text-sky-800">RESULTADO:</p><p>Crecimiento armónico y protección de humedales.</p></div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+
+        <hr class="my-16 border-t-2 border-gray-200">
+
+        <div id="module-5">
+            <h2 class="module-header-5">Las Competencias y el Ejercicio de la Autonomía</h2>
+            <main>
+                <section class="card">
+                    <h3 class="mb-4">Clasificación de las Competencias: ¿Quién tiene el poder?</h3>
+                    <p class="mb-6">La autonomía de Bogotá no es absoluta; se ejerce según el tipo de competencia. La ley clasifica las facultades del Distrito en tres categorías que definen su nivel de independencia para actuar y sus límites frente a la Nación.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-6 text-center bg-orange-50 border-2 border-orange-300 rounded-lg"><h4 class="text-lg font-bold mb-2 text-orange-800">1. Exclusivas</h4><p class="text-sm">Autonomía <strong>total</strong> para decidir y actuar. Máxima expresión de su régimen especial. Ej: POT.</p></div>
+                        <div class="p-6 text-center bg-red-50 border-2 border-red-300 rounded-lg"><h4 class="text-lg font-bold mb-2 text-red-800">2. Compartidas</h4><p class="text-sm">El Distrito y la Nación <strong>deben colaborar</strong>. La palabra clave es sinergia. Ej: Salud.</p></div>
+                        <div class="p-6 text-center bg-purple-50 border-2 border-purple-300 rounded-lg"><h4 class="text-lg font-bold mb-2 text-purple-800">3. Delegadas</h4><p class="text-sm">El Gobierno Nacional <strong>asigna temporalmente</strong> funciones. Bogotá actúa como ejecutor. Ej: Subsidios de vivienda.</p></div>
+                    </div>
+                    <p class="analysis-box analysis-box-5">
+                        <strong>Análisis del Aspirante:</strong> Para una pregunta situacional, identifique la naturaleza de la acción. ¿Es una decisión 100% local como cambiar una norma de uso del suelo? Es <strong>Exclusiva</strong>. ¿Implica coordinación con un Ministerio? Es <strong>Compartida</strong>. ¿Es un programa nacional implementado en Bogotá? Es <strong>Delegada</strong>.
+                    </p>
+                </section>
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-10">
+                    <section class="card lg:col-span-3">
+                        <h3 class="mb-4">El Núcleo de la Autonomía: Competencias Exclusivas</h3>
+                        <p class="mb-4">Las competencias exclusivas son el corazón del régimen especial de Bogotá, permitiéndole planificar su futuro con total independencia.</p>
+                        <div class="chart-container">
+                            <canvas id="exclusiveBarChart"></canvas>
+                        </div>
+                    </section>
+                    <section class="card lg:col-span-2">
+                        <h3 class="mb-4">El Balance del Poder: Competencia Compartida</h3>
+                        <p class="mb-4">En áreas como la salud, el éxito depende de la coordinación. Este gráfico ilustra la distribución de responsabilidades en un hospital público.</p>
+                        <div class="chart-container">
+                            <canvas id="sharedDoughnutChart"></canvas>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+
+        <footer class="text-center mt-16 py-6 border-t-2 border-gray-200">
+            <p class="text-sm text-gray-600">Guía de Estudio Integral generada por el Asistente Experto en Preparación para Concursos Públicos de Colombia.</p>
+            <p class="text-xs text-gray-400 mt-1">Versión 1.0 - Prohibido el uso de SVG o comentarios en el código.</p>
+        </footer>
+
+    </div>
+
+<script>
+    function formatLabel(str) {
+        if (typeof str !== 'string') return str;
+        if (str.length > 16) {
+            const words = str.split(' ');
+            let line = '';
+            const lines = [];
+            for (let i = 0; i < words.length; i++) {
+                if ((line + words[i]).length > 16 && line.length > 0) {
+                    lines.push(line.trim());
+                    line = '';
+                }
+                line += words[i] + ' ';
+            }
+            lines.push(line.trim());
+            return lines;
+        }
+        return str;
+    }
+
+    const tooltipTitleCallback = (tooltipItems) => {
+        return tooltipItems.map(item => {
+            const label = item.chart.data.labels[item.dataIndex];
+            return Array.isArray(label) ? label.join(' ') : label;
+        });
+    };
+
+    const unifiedColors = {
+        blue: { light: 'rgba(96, 165, 250, 0.7)', dark: 'rgba(30, 64, 175, 1)' },
+        green: { light: 'rgba(52, 211, 153, 0.7)', dark: 'rgba(4, 120, 87, 1)' },
+        purple: { light: 'rgba(167, 139, 250, 0.7)', dark: 'rgba(91, 33, 182, 1)' },
+        sky: { light: 'rgba(56, 189, 248, 0.7)', dark: 'rgba(2, 132, 199, 1)' },
+        orange: { light: 'rgba(251, 146, 60, 0.7)', dark: 'rgba(194, 65, 12, 1)' },
+        red: { light: 'rgba(248, 113, 113, 0.7)', dark: 'rgba(185, 28, 28, 1)' },
+        yellow: { light: 'rgba(250, 204, 21, 0.7)', dark: 'rgba(217, 119, 6, 1)' }
+    };
+
+    new Chart(document.getElementById('historicalChart'), {
+        type: 'line',
+        data: {
+            labels: ['Fundación', 'Virreinato', 'Constitución 1991'],
+            datasets: [{
+                label: 'Hitos Históricos',
+                data: [1538, 1717, 1991],
+                backgroundColor: unifiedColors.blue.light,
+                borderColor: unifiedColors.blue.dark,
+                borderWidth: 2,
+                tension: 0.1,
+                pointBackgroundColor: unifiedColors.blue.dark
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { title: tooltipTitleCallback } } }
+        }
+    });
+
+    new Chart(document.getElementById('lawsRadarChart'), {
+        type: 'radar',
+        data: {
+            labels: ['Estructura', 'Competencias', 'POT', 'Participación', 'Transparencia', 'Descentralización'].map(formatLabel),
+            datasets: [
+                { label: 'Dec-Ley 1421/93', data: [9, 9, 7, 8, 6, 9], backgroundColor: 'rgba(16, 185, 129, 0.5)', borderColor: unifiedColors.green.dark, borderWidth: 2 },
+                { label: 'Ley 388/97', data: [2, 5, 10, 4, 3, 4], backgroundColor: 'rgba(14, 165, 233, 0.5)', borderColor: unifiedColors.sky.dark, borderWidth: 2 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: { r: { suggestedMin: 0, suggestedMax: 10 } },
+            plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { title: tooltipTitleCallback } } }
+        }
+    });
+
+    new Chart(document.getElementById('impactBarChart'), {
+        type: 'bar',
+        data: {
+            labels: [formatLabel('Ley 1757 (Participación)'), formatLabel('Ley 1474 (Anticorrupción)')],
+            datasets: [{ data: [9.5, 8.5], backgroundColor: [unifiedColors.green.light, unifiedColors.sky.light], borderColor: [unifiedColors.green.dark, unifiedColors.sky.dark], borderWidth: 2 }]
+        },
+        options: {
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+            scales: { x: { beginAtZero: true, suggestedMax: 10 } },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { title: tooltipTitleCallback } } }
+        }
+    });
+
+    new Chart(document.getElementById('secretariasBarChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Educación', 'Salud', 'Movilidad', 'Ambiente', 'Integración Social', 'Seguridad'].map(formatLabel),
+            datasets: [{ data: [10, 9, 9.5, 8, 9.2, 8.8], backgroundColor: unifiedColors.purple.light, borderColor: unifiedColors.purple.dark, borderWidth: 2 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true, suggestedMax: 10 } },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { title: tooltipTitleCallback } } }
+        }
+    });
+
+    new Chart(document.getElementById('descentralizacionDoughnutChart'), {
+        type: 'doughnut',
+        data: {
+            labels: [formatLabel('Centralizada'), formatLabel('Descentralizada')],
+            datasets: [{ data: [40, 60], backgroundColor: [unifiedColors.purple.dark, unifiedColors.purple.light], borderColor: '#fff', borderWidth: 3 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { title: tooltipTitleCallback } } }
+        }
+    });
+
+    new Chart(document.getElementById('functionsPolarChart'), {
+        type: 'polarArea',
+        data: {
+            labels: ['Social', 'Planeación', 'Seguridad', 'Economía', 'Ambiente', 'Cultura'].map(formatLabel),
+            datasets: [{ data: [10, 9.5, 8, 8.5, 9, 7.5], backgroundColor: [unifiedColors.sky.light, unifiedColors.green.light, unifiedColors.red.light, unifiedColors.yellow.light, unifiedColors.green.dark, unifiedColors.purple.light] }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: { r: { suggestedMin: 0, suggestedMax: 10 } },
+            plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { title: tooltipTitleCallback } } }
+        }
+    });
+    
+    new Chart(document.getElementById('exclusiveBarChart'), {
+        type: 'bar',
+        data: {
+            labels: ['POT', 'Movilidad Local', 'Espacio Público', 'Ambiente Local', 'Tributos'].map(formatLabel),
+            datasets: [{ data: [100, 95, 90, 85, 100], backgroundColor: unifiedColors.orange.light, borderColor: unifiedColors.orange.dark, borderWidth: 2 }]
+        },
+        options: {
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+            scales: { x: { beginAtZero: true, max: 100, ticks: { callback: value => value + '%' } } },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { title: tooltipTitleCallback, label: (c) => ` Autonomía: ${c.raw}%` } } }
+        }
+    });
+
+    new Chart(document.getElementById('sharedDoughnutChart'), {
+        type: 'doughnut',
+        data: {
+            labels: [formatLabel('Distrito'), formatLabel('Nación')],
+            datasets: [{ data: [65, 35], backgroundColor: [unifiedColors.red.light, unifiedColors.orange.light], borderColor: '#fff', borderWidth: 3 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { title: tooltipTitleCallback, label: (c) => `${c.label}: ${c.raw}%` } } }
+        }
+    });
+
+</script>
+</body>
+</html>
