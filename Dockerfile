@@ -22,7 +22,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copia el resto del código de la aplicación
 COPY . .
-
+RUN chmod +x /var/task/run.sh
 # Expone el puerto que usa tu aplicación (ajusta si es necesario)
 EXPOSE 8000
 
