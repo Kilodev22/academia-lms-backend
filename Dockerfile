@@ -1,7 +1,7 @@
 # Usa una imagen oficial de Python como base
 FROM python:3.9-slim
 
-# Instala las dependencias del sistema operativo que WeasyPrint necesita
+# Instala las dependencias del sistema que WeasyPrint necesita
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpango-1.0-0 \
@@ -20,8 +20,11 @@ RUN python -m pip install --no-cache-dir -r requirements.txt
 # Copia el resto del código de tu aplicación
 COPY . .
 
-# Expone el puerto que usará Gunicorn
-EXPOSE 8000
+# Asegura que el script de inicio sea ejecutable
+RUN chmod +x /var/task/run.sh
 
-# Comando para iniciar la aplicación en producción
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "academy:create_app()"]
+# Expone el puerto que usará Gunicorn
+EXPOSE 8080
+
+# Comando para iniciar la aplicación a través del script
+CMD ["/var/task/run.sh"]
