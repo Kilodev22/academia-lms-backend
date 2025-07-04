@@ -1,10 +1,10 @@
 {
-  "version": 2,
   "builds": [
     {
-      "src": "academy/__init__.py",
+      "src": "manage.py",
       "use": "@vercel/python",
       "config": {
+        "runtime": "python3.9",
         "wsgi": "academy.app"
       }
     }
@@ -12,7 +12,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "academy/__init__.py"
+      "dest": "manage.py"
     }
   ]
 }
