@@ -1,18 +1,5 @@
 {
   "builds": [
-    {
-      "src": "manage.py",
-      "use": "@vercel/python",
-      "config": {
-        "runtime": "python3.9",
-        "wsgi": "academy.app"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "manage.py"
-    }
+    { "src": "Dockerfile", "use": "@vercel/docker" }
   ]
 }
