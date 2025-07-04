@@ -10,7 +10,7 @@ from flask import Blueprint
 from .extensions import db, bcrypt
 from .models import User, Course, Lesson
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from weasyprint import HTML, CSS
+#from weasyprint import HTML, CSS
 
 # --- CONFIGURACIÓN DE IDIOMA PARA LA FECHA ---
 try:
@@ -155,10 +155,9 @@ def get_my_courses():
     results = [{"id": course.id, "title": course.title, "description": course.description} for course in enrolled_courses]
     return jsonify(results), 200
 
-@main_routes.route('/courses/<int:course_id>/certificate', methods=['GET'])
-@jwt_required()
-def generate_certificate(course_id):
-    current_user_id = get_jwt_identity()
+#@main_routes.route('/courses/<int:course_id>/certificate', methods=['GET'])
+#@jwt_required()###
+##   current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
     if not user:
         return jsonify({"message": "Usuario no encontrado"}), 404
@@ -170,8 +169,8 @@ def generate_certificate(course_id):
     issue_date = datetime.now().strftime("%d de %B de %Y")
     rendered_html = render_template('certificate_template.html', student_name=user.username, course_name=course.title, issue_date=issue_date)
     pdf = HTML(string=rendered_html).write_pdf()
-    return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=certificado.pdf'})
-
+#  return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=certificado.pdf'})
+##
 
 # --- RUTAS DE ARCHIVOS ---
 @main_routes.route('/videos/<path:filename>')
