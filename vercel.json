@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "manage.py",
+      "use": "@vercel/python",
+      "config": {
+        "wsgi": "academy.app"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "manage.py"
+    }
+  ]
+}
