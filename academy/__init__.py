@@ -13,7 +13,18 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    CORS(app)
+    # --- ESTA ES LA SECCIÓN CORREGIDA ---
+    # Define las URLs (orígenes) que tienen permiso para conectarse.
+    origins = [
+        "https://academia-lms-frontend.vercel.app",  # Tu frontend en producción
+        "http://127.0.0.1:5500",                      # Para desarrollo local con VS Code Live Server
+        "http://localhost:5500",                     # Alternativa para Live Server
+        "http://localhost:8000"                      # Para desarrollo local con servidor de Python
+    ]
+    # Reemplaza CORS(app) con esta configuración más específica.
+    CORS(app, resources={r"/*": {"origins": origins}})
+    # --- FIN DE LA CORRECCIÓN ---
+
 
     # 2. Inicializa el panel de administración con la aplicación
     admin_instance.init_app(app)
