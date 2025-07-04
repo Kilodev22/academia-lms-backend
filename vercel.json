@@ -5,7 +5,7 @@
       "src": "manage.py",
       "use": "@vercel/python",
       "config": {
-    "wsgi": "academy.app"
+      "wsgi": "academy.app"
       }
     }
   ],
