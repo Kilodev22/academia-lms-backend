@@ -3,6 +3,7 @@ FROM python:3.9-slim
 
 # Instala las dependencias del sistema operativo que WeasyPrint necesita
 RUN apt-get update && apt-get install -y \
+    build-essential \
     libpango-1.0-0 \
     libpangoft2-1.0-0 \
     libcairo2 \
@@ -16,8 +17,6 @@ WORKDIR /var/task
 COPY requirements.txt .
 RUN python -m pip install --no-cache-dir -r requirements.txt
 
-
-
 # Copia el resto del código de tu aplicación
 COPY . .
 
@@ -25,4 +24,4 @@ COPY . .
 EXPOSE 8000
 
 # Comando para iniciar la aplicación en producción
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "academy:create_app()"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "academy:create_app()"]
