@@ -18,7 +18,7 @@ class Config:
     
     # 2. Si es una URL de MySQL, la modificamos para que sea compatible con Vercel.
     if db_url and db_url.startswith("mysql://"):
-        db_url = db_url.replace("mysql://", "mysql+mysqlconnector://", 1)
+        db_url = db_url.replace("mysql://", 1)
     
     # 3. Asignamos la URL (ya corregida) a la configuración de SQLAlchemy.
     SQLALCHEMY_DATABASE_URI = db_url
