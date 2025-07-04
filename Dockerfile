@@ -1,30 +1,30 @@
-# Usa una imagen oficial de Python como base
+# Usa una imagen base de Python
 FROM python:3.9-slim
 
-# Instala las dependencias del sistema que WeasyPrint necesita
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Actualiza los paquetes del sistema e instala las dependencias de WeasyPrint
+# Esto es clave para solucionar el error de Pango
 RUN apt-get update && apt-get install -y \
     build-essential \
-    libpango-1.0-0 \
-    libpangoft2-1.0-0 \
+    python3-dev \
+    python3-cffi \
     libcairo2 \
-    libgdk-pixbuf2.0-0 \
+    pango1.0-tools \
+    libpangocairo-1.0-0 \
+    --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Establece el directorio de trabajo dentro del contenedor
-WORKDIR /var/task
+# Copia el archivo de requerimientos e instala las dependencias de Python
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia e instala las dependencias de Python
-COPY requirements.txt .
-RUN python -m pip install --no-cache-dir -r requirements.txt
-
-# Copia el resto del código de tu aplicación
+# Copia el resto del código de la aplicación
 COPY . .
 
-# Asegura que el script de inicio sea ejecutable
-RUN chmod +x /var/task/run.sh
+# Expone el puerto que usa tu aplicación (ajusta si es necesario)
+EXPOSE 8000
 
-# Expone el puerto que usará Gunicorn
-EXPOSE 8080
-
-# Comando para iniciar la aplicación a través del script
-CMD ["/var/task/run.sh"]
+# Comando para iniciar la aplicación con Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "manage:app"]
