@@ -45,41 +45,15 @@ def register_user():
     return jsonify({'message': 'Usuario creado exitosamente'}), 201
 
 @main_routes.route('/login', methods=['POST'])
-def login():
-    """
-    Maneja el inicio de sesión del usuario.
-    Añadimos un bloque try...except para capturar el error detallado.
-    """
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({"message": "No se recibieron datos"}), 400
-
-        email = data.get('email')
-        password = data.get('password')
-
-        if not email or not password:
-            return jsonify({"message": "Faltan email o contraseña"}), 400
-
-        user = User.query.filter_by(email=email).first()
-
-        if user and bcrypt.check_password_hash(user.password_hash, password):
-            access_token = create_access_token(identity=user.id)
-            return jsonify(access_token=access_token)
-        else:
-            return jsonify({"message": "Credenciales inválidas"}), 401
-
-    except Exception as e:
-        # Si ocurre CUALQUIER error en el bloque 'try'...
-        # 1. Imprimimos el error detallado en los logs de Vercel.
-        print(f"ERROR DETALLADO EN LA RUTA /login: {e}", file=sys.stderr)
-        traceback.print_exc(file=sys.stderr)
-
-        # 2. Devolvemos una respuesta de error clara al frontend.
-        return jsonify({"error": "Ocurrió un error interno durante el login."}), 500
-
-# ... (el resto de tus rutas)
-
+def login_user():
+    data = request.get_json()
+    email = data.get('email', None)
+    password = data.get('password', None)
+    user = User.query.filter_by(email=email).first()
+    if user and bcrypt.check_password_hash(user.password_hash, password):
+        access_token = create_access_token(identity=str(user.id))
+        return jsonify(access_token=access_token), 200
+    return jsonify({"message": "Credenciales inválidas"}), 401
 
 @main_routes.route('/profile', methods=['GET'])
 @jwt_required()
