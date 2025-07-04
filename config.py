@@ -11,7 +11,9 @@ class Config:
     
     # --- AÑADE ESTAS LÍNEAS PARA DEPURAR ---
     db_url = os.environ.get('DATABASE_URL')
-    print(f"DEBUG: La DATABASE_URL leída es: {db_url}") 
+    if db_url and db_url.startswith("mysql://"):
+     db_url = db_url.replace("mysql://", "mysql+mysqlconnector://", 1)
+
     # Configuración de la base de datos
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
