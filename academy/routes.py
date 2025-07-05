@@ -136,13 +136,16 @@ def get_lessons_for_course(course_id):
                 content_type = 'pdf'
             elif filename.endswith(('.html', '.htm')):
                 content_type = 'html'
+            # --- LÍNEA AÑADIDA ---
+            elif filename.endswith(('.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp')):
+                content_type = 'image'
         
         results.append({
             "id": lesson.id, 
             "title": lesson.title, 
             "order": lesson.order,
             "content": lesson.content,
-            "content_type": content_type  # NUEVO CAMPO para el frontend
+            "content_type": content_type  # AHORA ENVIARÁ 'image' CORRECTAMENTE
         })
     
     return jsonify(results), 200
