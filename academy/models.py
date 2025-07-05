@@ -57,7 +57,7 @@ class Lesson(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    order = db.Column(db.Integer, nullable=False)
+    order = db.Column(db.Float, nullable=False)
 
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
 
