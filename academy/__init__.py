@@ -15,8 +15,8 @@ def create_app(config_class=Config):
 
     # --- ESTA ES LA SECCIÓN CORREGIDA ---
     # Define las URLs (orígenes) que tienen permiso para conectarse.
-    origins = ["https://centrodeinnovacion.digital",
-        "https://academia-lms-frontend.vercel.app",  # Tu frontend en producción
+    origins = ["centrodeinnovacion.digital",
+        "https://www.centrodeinnovacion.digital",  # Tu frontend en producción
         "http://127.0.0.1:5500",                      # Para desarrollo local con VS Code Live Server
         "http://localhost:5500",                     # Alternativa para Live Server
         "http://localhost:8000"                      # Para desarrollo local con servidor de Python
