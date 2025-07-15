@@ -89,22 +89,14 @@ def register_user():
     db.session.commit()
     return jsonify({'message': 'Usuario creado exitosamente'}), 201
 
-# academy/routes.py
-# ...
 @main_routes.route('/login', methods=['POST'])
 def login_user():
-    # ... (código existente) ...
+    data = request.get_json()
+    email = data.get('email', None)
+    password = data.get('password', None)
+    user = User.query.filter_by(email=email).first()
     if user and bcrypt.check_password_hash(user.password_hash, password):
         access_token = create_access_token(identity=str(user.id))
-        decoded_token = decode_token(access_token)
-        new_jti = decoded_token['jti']
-
-        print(f"LOGIN: Asignando new_jti: {new_jti} a user_id: {user.id}")
-        user.last_jti = new_jti
-        db.session.add(user) # Asegurarse de que el objeto esté en la sesión
-        db.session.commit() # Guardar los cambios
-        print(f"LOGIN: commit() realizado para user_id: {user.id}. last_jti en DB: {user.last_jti}") # Leerlo después del commit para confirmar
-
         return jsonify(access_token=access_token), 200
     return jsonify({"message": "Credenciales inválidas"}), 401
 
