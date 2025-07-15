@@ -11,7 +11,7 @@ import re
 from flask import Blueprint
 from .extensions import db, bcrypt
 from .models import User, Course, Lesson
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity,decode_token,jwt 
 from .extensions import jwt
 #from weasyprint import HTML, CSS
 
@@ -47,7 +47,6 @@ def check_if_token_revoked(jwt_header, jwt_payload):
     jti = jwt_payload.get('jti')
 
     # === Parte existente para forzar lectura consistente ===
-    from .extensions import db, User # Asegúrate de importar User si no lo está
     db.session.expire_all()
     user = db.session.query(User).get(user_id)
     # === Fin de parte existente ===
