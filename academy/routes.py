@@ -13,8 +13,6 @@ from .extensions import db, bcrypt
 from .models import User, Course, Lesson
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from .extensions import jwt
-from .models import User # Asegúrate de que User esté importado aquí
-from .extensions import db # Asegúrate de que db esté importado aquí
 #from weasyprint import HTML, CSS
 
 # --- CONFIGURACIÓN DE IDIOMA PARA LA FECHA ---
@@ -37,6 +35,7 @@ main_routes = Blueprint('main', __name__)
 # Esta función se llama cada vez que se accede a un endpoint protegido
 # para verificar si el JTI del token es válido para el usuario actual. [cite: 266, 347, 567, 690, 913]
 # ===================================================================
+
 @main_routes.record_once
 def on_load(state):
     from .extensions import jwt # Importa la instancia jwt
@@ -83,14 +82,6 @@ def login_user():
     user = User.query.filter_by(email=email).first()
     if user and bcrypt.check_password_hash(user.password_hash, password):
         access_token = create_access_token(identity=str(user.id))
-
-        # Obtener el payload para extraer el jti
-        decoded_token = decode_token(access_token)
-        new_jti = decoded_token['jti']
-
-        user.last_jti = new_jti # <-- Aquí se asigna el nuevo JTI
-        db.session.commit() # <-- Y aquí se guarda en la base de datos
-
         return jsonify(access_token=access_token), 200
     return jsonify({"message": "Credenciales inválidas"}), 401
 
