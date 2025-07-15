@@ -36,29 +36,44 @@ main_routes = Blueprint('main', __name__)
 # para verificar si el JTI del token es válido para el usuario actual. [cite: 266, 347, 567, 690, 913]
 # ===================================================================
 
-@main_routes.record_once
-def on_load(state):
-    from .extensions import jwt # Importa la instancia jwt
+# ...
+from datetime import datetime, timedelta
 
-    @jwt.token_in_blocklist_loader
-    def check_if_token_revoked(jwt_header, jwt_payload):
-        user_id = jwt_payload.get('sub')
-        jti = jwt_payload.get('jti')
+# ...
 
-        # === SOLUCIÓN: FORZAR UNA LECTURA CONSISTENTE DEL USUARIO ===
-        # Expira el objeto de la sesión para asegurar una lectura fresca desde la DB
-        db.session.expire_all()
-        # Vuelve a consultar al usuario para obtener el last_jti más reciente
-        user = db.session.query(User).get(user_id) # Usa query(User).get() con db.session explícita
+@jwt.token_in_blocklist_loader
+def check_if_token_revoked(jwt_header, jwt_payload):
+    user_id = jwt_payload.get('sub')
+    jti = jwt_payload.get('jti')
 
-        print(f"Verificando token para user_id: {user_id}, JTI: {jti}")
-        if user is None:
-            print(f"Usuario {user_id} no encontrado. Token revocado.")
-            return True
+    # === Parte existente para forzar lectura consistente ===
+    from .extensions import db, User # Asegúrate de importar User si no lo está
+    db.session.expire_all()
+    user = db.session.query(User).get(user_id)
+    # === Fin de parte existente ===
 
-        is_revoked = user.last_jti != jti
-        print(f"last_jti almacenado: {user.last_jti}, JTI del token actual: {jti}, Revocado: {is_revoked}")
-        return is_revoked
+    # NUEVO: Comprobación de "período de gracia" para evitar revocación inmediata de la propia sesión
+    # Esto es un parche para problemas de consistencia de la DB en el primer request.
+    # Solo permite que el token recién emitido pase si su JTI coincide con el last_jti
+    # Y si fue emitido hace muy poco tiempo (ej. 5 segundos)
+    issued_at_timestamp = jwt_payload.get('iat')
+    if issued_at_timestamp:
+        issued_at_datetime = datetime.fromtimestamp(issued_at_timestamp)
+        # Definir un período de gracia (ej. 5 segundos)
+        GRACE_PERIOD = timedelta(seconds=5)
+        if (datetime.utcnow() - issued_at_datetime) < GRACE_PERIOD:
+            if user and user.last_jti == jti:
+                print(f"DEBUG: Token {jti} dentro del período de gracia y coincide. No revocado.")
+                return False # No revocar si está dentro del período de gracia y JTI coincide
+
+    print(f"Verificando token para user_id: {user_id}, JTI: {jti}")
+    if user is None:
+        print(f"Usuario {user_id} no encontrado. Token revocado.")
+        return True
+
+    is_revoked = user.last_jti != jti
+    print(f"last_jti almacenado: {user.last_jti}, JTI del token actual: {jti}, Revocado: {is_revoked}")
+    return is_revoked
 # --- RUTAS DE AUTENTICACIÓN Y GENERALES (SIN CAMBIOS) ---
 
 @main_routes.route('/register', methods=['POST'])
@@ -74,14 +89,22 @@ def register_user():
     db.session.commit()
     return jsonify({'message': 'Usuario creado exitosamente'}), 201
 
+# academy/routes.py
+# ...
 @main_routes.route('/login', methods=['POST'])
 def login_user():
-    data = request.get_json()
-    email = data.get('email', None)
-    password = data.get('password', None)
-    user = User.query.filter_by(email=email).first()
+    # ... (código existente) ...
     if user and bcrypt.check_password_hash(user.password_hash, password):
         access_token = create_access_token(identity=str(user.id))
+        decoded_token = decode_token(access_token)
+        new_jti = decoded_token['jti']
+
+        print(f"LOGIN: Asignando new_jti: {new_jti} a user_id: {user.id}")
+        user.last_jti = new_jti
+        db.session.add(user) # Asegurarse de que el objeto esté en la sesión
+        db.session.commit() # Guardar los cambios
+        print(f"LOGIN: commit() realizado para user_id: {user.id}. last_jti en DB: {user.last_jti}") # Leerlo después del commit para confirmar
+
         return jsonify(access_token=access_token), 200
     return jsonify({"message": "Credenciales inválidas"}), 401
 
