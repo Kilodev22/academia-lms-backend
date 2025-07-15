@@ -11,7 +11,7 @@ import re
 from flask import Blueprint
 from .extensions import db, bcrypt
 from .models import User, Course, Lesson
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity,decode_token,jwt 
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity,decode_token
 from .extensions import jwt
 #from weasyprint import HTML, CSS
 
