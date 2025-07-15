@@ -20,7 +20,9 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    last_jti = db.Column(db.String(36), nullable=True) # JTI is typically a UUID (36 chars)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    last_jti = db.Column(db.String(36), nullable=True) # El JTI es típicamente un UUID (36 caracteres)
 
     created_courses = db.relationship('Course', backref='instructor', lazy=True)
 

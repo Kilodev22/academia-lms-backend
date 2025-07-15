@@ -2,83 +2,193 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Certificado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificado de Finalización</title>
     <style>
-        /* --- ¡AQUÍ ESTÁ LA NUEVA REGLA MÁGICA! --- */
+        /* --- Configuración de Fuentes y Página --- */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap');
+
         @page {
-            size: A4 landscape; /* Define el tamaño A4 y la orientación horizontal */
-            margin: 0; /* Elimina los márgenes de impresión por defecto */
+            size: A4 landscape;
+            margin: 0;
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap');
-
         body {
-            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            color: #333;
-            /* Pequeño ajuste para centrar perfectamente en la nueva orientación */
+            font-family: 'Lato', sans-serif;
+            background-color: #f0f2f5;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: #333;
         }
+
+        /* --- Contenedor Principal --- */
         .certificate-container {
-            width: 95%; /* Usamos porcentaje para que se ajuste al tamaño A4 landscape */
-            height: 90%;
-            background-color: #f7f6f1;
-            border: 15px solid #2c3e50;
-            padding: 20px;
-            box-sizing: border-box;
+            width: 297mm; /* Ancho A4 horizontal */
+            height: 210mm; /* Alto A4 horizontal */
             position: relative;
-            text-align: center;
+            background-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABYSURBVHhe7cEBAQAAAIIg/69uSEABAAAAAAAAAAAAAAAAMJcAAAAAAAAAAAAAAADg1gAAAAAAAAAAAAAAAOBWAAAAAAAAAAAAAADA7QMIWAMA5rI2DQAAAABJRU5ErkJggg==');
+            align-items: center;
+            padding: 20mm;
+            box-sizing: border-box;
         }
-        .title {
+
+        /* --- Elementos Decorativos --- */
+        .certificate-border {
+            position: absolute;
+            top: 10mm;
+            left: 10mm;
+            width: calc(100% - 20mm);
+            height: calc(100% - 20mm);
+            border: 2px solid #0d2c4f;
+            box-sizing: border-box;
+        }
+
+        .border-corner {
+            position: absolute;
+            width: 30mm;
+            height: 30mm;
+            fill: #d4af37; /* Color dorado */
+        }
+        .top-left { top: -2px; left: -2px; transform: rotate(0deg); }
+        .top-right { top: -2px; right: -2px; transform: rotate(90deg); }
+        .bottom-left { bottom: -2px; left: -2px; transform: rotate(270deg); }
+        .bottom-right { bottom: -2px; right: -2px; transform: rotate(180deg); }
+
+        /* --- Contenido del Certificado --- */
+        .content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-title {
             font-family: 'Playfair Display', serif;
-            font-size: 48px;
-            color: #2c3e50;
+            font-size: 42pt;
+            color: #0d2c4f; /* Azul marino oscuro */
             margin: 0;
+            font-weight: 700;
         }
+
         .subtitle {
-            font-size: 20px;
-            color: #7f8c8d;
-            margin-bottom: 15px;
+            font-size: 14pt;
+            color: #555;
+            margin: 10px 0 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
+
         .student-name {
             font-family: 'Playfair Display', serif;
-            font-size: 40px;
-            font-weight: bold;
-            color: #0056b3;
-            border-bottom: 2px solid #2c3e50;
+            font-size: 36pt;
+            color: #d4af37; /* Dorado */
+            margin: 20px 0;
             display: inline-block;
+            border-bottom: 2px solid #0d2c4f;
             padding-bottom: 5px;
-            margin: 15px 0;
         }
+
+        .course-details {
+            font-size: 12pt;
+            line-height: 1.6;
+            margin: 20px 0;
+            color: #444;
+        }
+
         .course-name {
-            font-size: 24px;
+            font-weight: 700;
             font-style: italic;
-            color: #34495e;
-            margin: 15px 0;
+            color: #0d2c4f;
         }
-        .date {
-            margin-top: 40px;
-            font-size: 16px;
-            color: #7f8c8d;
+
+        /* --- Pie de Página: Firmas y Sello --- */
+        .footer {
+            position: absolute;
+            bottom: 25mm;
+            width: calc(100% - 40mm);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            z-index: 2;
+        }
+
+        .signature-block {
+            width: 40%;
+            text-align: center;
+        }
+
+        .signature-line {
+            border-top: 1px solid #555;
+            margin-bottom: 5px;
+        }
+
+        .signature-title {
+            font-size: 10pt;
+            color: #555;
+        }
+
+        .seal {
+            width: 20%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .seal svg {
+            width: 80px;
+            height: 80px;
         }
     </style>
 </head>
 <body>
     <div class="certificate-container">
-        <h1 class="title">Certificado de Finalización</h1>
-        <p class="subtitle">Otorgado a:</p>
-        <h2 class="student-name">{{ student_name }}</h2>
-        <p class="subtitle">Por haber completado exitosamente el curso:</p>
-        <h3 class="course-name">{{ course_name }}</h3>
-        <p class="date">Emitido el: {{ issue_date }}</p>
+        <!-- Borde Decorativo -->
+        <div class="certificate-border">
+            <svg class="border-corner top-left" viewBox="0 0 100 100"><polygon points="0,0 100,0 0,100"/></svg>
+            <svg class="border-corner top-right" viewBox="0 0 100 100"><polygon points="0,0 100,0 0,100"/></svg>
+            <svg class="border-corner bottom-left" viewBox="0 0 100 100"><polygon points="0,0 100,0 0,100"/></svg>
+            <svg class="border-corner bottom-right" viewBox="0 0 100 100"><polygon points="0,0 100,0 0,100"/></svg>
+        </div>
+
+        <!-- Contenido Principal -->
+        <div class="content">
+            <h1 class="main-title">Certificado de Finalización</h1>
+            <p class="subtitle">Se otorga a</p>
+            <h2 class="student-name">{{ student_name }}</h2>
+            <p class="course-details">
+                Por haber completado de manera exitosa y satisfactoria todos los requisitos académicos del curso:
+                <br>
+                <span class="course-name">{{ course_name }}</span>
+            </p>
+        </div>
+
+        <!-- Pie de Página -->
+        <div class="footer">
+            <div class="signature-block">
+                <div class="signature-line"></div>
+                <p class="signature-title">Instructor Principal</p>
+            </div>
+            <div class="seal">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="48" stroke="#0d2c4f" stroke-width="2" fill="none"/>
+                    <circle cx="50" cy="50" r="42" stroke="#d4af37" stroke-width="4" fill="#f0f2f5"/>
+                    <text x="50" y="45" font-family="Lato, sans-serif" font-size="10" fill="#0d2c4f" text-anchor="middle" font-weight="bold">SELLO DE</text>
+                    <text x="50" y="58" font-family="Lato, sans-serif" font-size="10" fill="#0d2c4f" text-anchor="middle" font-weight="bold">CALIDAD</text>
+                    <text x="50" y="70" font-family="Lato, sans-serif" font-size="8" fill="#0d2c4f" text-anchor="middle">ACADEMIA LMS</text>
+                </svg>
+            </div>
+            <div class="signature-block">
+                <div class="signature-line"></div>
+                <p class="signature-title">Director Académico</p>
+            </div>
+        </div>
     </div>
 </body>
 </html>

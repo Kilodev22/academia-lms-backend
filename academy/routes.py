@@ -12,6 +12,7 @@ from flask import Blueprint
 from .extensions import db, bcrypt
 from .models import User, Course, Lesson
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from .extensions import jwt
 #from weasyprint import HTML, CSS
 
 # --- CONFIGURACIÓN DE IDIOMA PARA LA FECHA ---
@@ -29,6 +30,28 @@ except locale.Error:
 
 main_routes = Blueprint('main', __name__)
 
+# ===================================================================
+# CALLBACK DE LISTA NEGRA/REVOCACIÓN DE TOKENS JWT
+# Esta función se llama cada vez que se accede a un endpoint protegido
+# para verificar si el JTI del token es válido para el usuario actual. [cite: 266, 347, 567, 690, 913]
+# ===================================================================
+@main_routes.record_once
+def on_load(state):
+    from .extensions import jwt # Importa la instancia jwt que fue inicializada
+@jwt.token_in_blocklist_loader
+def check_if_token_revoked(jwt_header, jwt_payload):
+    user_id = jwt_payload.get('sub')
+    jti = jwt_payload.get('jti')
+    user = User.query.get(user_id)
+
+    print(f"Verificando token para user_id: {user_id}, JTI: {jti}")
+    if user is None:
+        print(f"Usuario {user_id} no encontrado. Token revocado.")
+        return True
+
+    is_revoked = user.last_jti != jti
+    print(f"last_jti almacenado: {user.last_jti}, JTI del token actual: {jti}, Revocado: {is_revoked}")
+    return is_revoked
 # --- RUTAS DE AUTENTICACIÓN Y GENERALES (SIN CAMBIOS) ---
 
 @main_routes.route('/register', methods=['POST'])
