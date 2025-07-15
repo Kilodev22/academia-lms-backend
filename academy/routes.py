@@ -46,31 +46,33 @@ def check_if_token_revoked(jwt_header, jwt_payload):
     user_id = jwt_payload.get('sub')
     jti = jwt_payload.get('jti')
 
-    # === Parte existente para forzar lectura consistente ===
-    db.session.expire_all()
-    user = db.session.query(User).get(user_id)
-    # === Fin de parte existente ===
+    # === 1. FORZAR LECTURA CONSISTENTE (PRIMERA LÍNEA DE DEFENSA) ===
+    db.session.expire_all() # Limpia la caché de la sesión
+    user = db.session.query(User).get(user_id) # Vuelve a consultar al usuario de la DB
 
-    # NUEVO: Comprobación de "período de gracia" para evitar revocación inmediata de la propia sesión
-    # Esto es un parche para problemas de consistencia de la DB en el primer request.
-    # Solo permite que el token recién emitido pase si su JTI coincide con el last_jti
-    # Y si fue emitido hace muy poco tiempo (ej. 5 segundos)
-    issued_at_timestamp = jwt_payload.get('iat')
+    # === 2. LÓGICA DEL PERÍODO DE GRACIA (PARCHE PARA INCONSISTENCIA DE REPLICACIÓN) ===
+    issued_at_timestamp = jwt_payload.get('iat') # Obtiene el timestamp de emisión del token
+    
+    # Solo aplica el período de gracia si tenemos un timestamp de emisión
     if issued_at_timestamp:
         issued_at_datetime = datetime.fromtimestamp(issued_at_timestamp)
-        # Definir un período de gracia (ej. 5 segundos)
-        GRACE_PERIOD = timedelta(seconds=5)
-        if (datetime.utcnow() - issued_at_datetime) < GRACE_PERIOD:
-            if user and user.last_jti == jti:
-                print(f"DEBUG: Token {jti} dentro del período de gracia y coincide. No revocado.")
-                return False # No revocar si está dentro del período de gracia y JTI coincide
+        GRACE_PERIOD = timedelta(seconds=5) # Define un período de gracia (ej. 5 segundos)
 
+        # Si el token fue emitido muy recientemente...
+        if (datetime.utcnow() - issued_at_datetime) < GRACE_PERIOD:
+            # ...y el usuario existe, y el JTI del token *coincide* con el last_jti en la DB
+            # (que debería haber sido escrito justo antes de esto)
+            if user and user.last_jti == jti:
+                print(f"DEBUG: Token {jti} ({user_id}) dentro del período de gracia y coincide con last_jti. No revocado.")
+                return False # ¡IMPORTANTE: NO revocar! Permitir el paso.
+
+    # === 3. Lógica de revocación normal (si no aplica el período de gracia o no coincide) ===
     print(f"Verificando token para user_id: {user_id}, JTI: {jti}")
     if user is None:
         print(f"Usuario {user_id} no encontrado. Token revocado.")
-        return True
+        return True # Si el usuario no existe, revocar
 
-    is_revoked = user.last_jti != jti
+    is_revoked = user.last_jti != jti # Comparación final: JTI del token vs last_jti de la DB
     print(f"last_jti almacenado: {user.last_jti}, JTI del token actual: {jti}, Revocado: {is_revoked}")
     return is_revoked
 # --- RUTAS DE AUTENTICACIÓN Y GENERALES (SIN CAMBIOS) ---
@@ -94,8 +96,22 @@ def login_user():
     email = data.get('email', None)
     password = data.get('password', None)
     user = User.query.filter_by(email=email).first()
+
     if user and bcrypt.check_password_hash(user.password_hash, password):
         access_token = create_access_token(identity=str(user.id))
+
+        try:
+            decoded_token = decode_token(access_token)
+            new_jti = decoded_token['jti']
+        except Exception as e:
+            print(f"ERROR al decodificar token o obtener JTI: {e}")
+            return jsonify({"message": "Error interno al generar sesión"}), 500
+
+        user.last_jti = new_jti
+        db.session.add(user) 
+        db.session.commit() # Asegúrate de que el commit se haga aquí
+        print(f"LOGIN: JTI {new_jti} asignado y commiteado para user_id: {user.id}. last_jti en DB: {user.last_jti}")
+
         return jsonify(access_token=access_token), 200
     return jsonify({"message": "Credenciales inválidas"}), 401
 
