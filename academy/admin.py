@@ -64,10 +64,11 @@ class UserModelView(SecureModelView):
             model.password_hash = bcrypt.generate_password_hash('defaultpassword').decode('utf-8')
 
 class CourseModelView(SecureModelView):
-    form_columns = ('title', 'description', 'instructor')
+    # --- LÍNEA MODIFICADA ---
+    form_columns = ('title', 'description', 'image_url', 'instructor')
     form_args = { 'instructor': { 'label': 'Instructor', 'query_factory': lambda: db.session.query(User).all() } }
     form_widget_args = { 'description': { 'rows': 10, 'class': 'form-control' } }
-
+    
 class LessonModelView(SecureModelView):
     # El modelo de Lesson no tiene 'content_type', se asume video/pdf según el nombre de archivo
     form_columns = ('title', 'content', 'order', 'course')

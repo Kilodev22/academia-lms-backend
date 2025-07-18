@@ -56,7 +56,7 @@ def check_if_token_revoked(jwt_header, jwt_payload):
     # Solo aplica el período de gracia si tenemos un timestamp de emisión
     if issued_at_timestamp:
         issued_at_datetime = datetime.fromtimestamp(issued_at_timestamp)
-        GRACE_PERIOD = timedelta(seconds=5) # Define un período de gracia (ej. 5 segundos)
+        GRACE_PERIOD = timedelta(seconds=10) # Define un período de gracia (ej. 5 segundos)
 
         # Si el token fue emitido muy recientemente...
         if (datetime.utcnow() - issued_at_datetime) < GRACE_PERIOD:
@@ -141,9 +141,10 @@ def create_course():
     return jsonify({ "id": new_course.id, "title": new_course.title, "description": new_course.description, "instructor_id": int(new_course.instructor_id) }), 201
 
 @main_routes.route('/courses', methods=['GET'])
+
 def get_all_courses():
     courses = Course.query.all()
-    results = [{"id": course.id, "title": course.title, "description": course.description, "instructor_id": course.instructor_id} for course in courses]
+    results = [{"id": course.id, "title": course.title, "description": course.description, "instructor_id": course.instructor_id, "image_url": course.image_url} for course in courses]
     return jsonify(results), 200
 
 @main_routes.route('/courses/<int:course_id>', methods=['GET'])
@@ -151,7 +152,8 @@ def get_course(course_id):
     course = Course.query.get(course_id)
     if not course:
         return jsonify({"message": "Curso no encontrado"}), 404
-    return jsonify({"id": course.id, "title": course.title, "description": course.description, "instructor_id": course.instructor_id, "created_at": course.created_at.strftime("%Y-%m-%d %H:%M:%S")}), 200
+    # --- LÍNEA MODIFICADA ---
+    return jsonify({"id": course.id, "title": course.title, "description": course.description, "instructor_id": course.instructor_id, "created_at": course.created_at.strftime("%Y-%m-%d %H:%M:%S"), "image_url": course.image_url}), 200
 
 @main_routes.route('/courses/<int:course_id>/lessons', methods=['POST'])
 @jwt_required()
@@ -178,6 +180,7 @@ def create_lesson_for_course(course_id):
 # FUNCIÓN MODIFICADA PARA SOPORTAR TIPOS DE CONTENIDO
 # ===================================================================
 @main_routes.route('/courses/<int:course_id>/lessons', methods=['GET'])
+@jwt_required()
 def get_lessons_for_course(course_id):
     course = Course.query.get(course_id)
     if not course:
@@ -217,7 +220,8 @@ def get_my_courses():
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
     enrolled_courses = user.enrolled_courses
-    results = [{"id": course.id, "title": course.title, "description": course.description} for course in enrolled_courses]
+    # --- LÍNEA MODIFICADA ---
+    results = [{"id": course.id, "title": course.title, "description": course.description, "image_url": course.image_url} for course in enrolled_courses]
     return jsonify(results), 200
 
 #@main_routes.route('/courses/<int:course_id>/certificate', methods=['GET'])

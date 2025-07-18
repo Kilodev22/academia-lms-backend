@@ -42,6 +42,10 @@ class Course(db.Model):
     title = db.Column(db.String(120), nullable=False)
     description = db.Column(db.Text, nullable=True)
     
+    # --- LÍNEA AÑADIDA ---
+    # Este campo guardará el enlace a la imagen del curso.
+    image_url = db.Column(db.String(255), nullable=True)
+
     instructor_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -50,7 +54,7 @@ class Course(db.Model):
     lessons = db.relationship('Lesson', backref='course', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
-        return f'<Course {self.title}>'
+       return f'<Course {self.title}>'
 
 # ==============================================================================
 # MODELO LESSON (NUEVO)
