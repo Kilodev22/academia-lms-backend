@@ -3,12 +3,16 @@ from dotenv import load_dotenv
 from datetime import timedelta 
 # Carga las variables de un archivo .env si existe (para desarrollo local)
 basedir = os.path.abspath(os.path.dirname(__file__))
-load_dotenv(os.path.join(basedir, '.env'))
+load_dotenv()
 
 class Config:
     # Claves secretas para la seguridad.
     SECRET_KEY = os.environ.get('SECRET_KEY')
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+    # --- NUEVAS CLAVES PARA GOOGLE OAUTH ---
+    GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
+    GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
+    FRONTEND_URL = os.environ.get('FRONTEND_URL')
 
     # --- Lógica Definitiva para la Conexión a la Base de Datos ---
     

@@ -9,10 +9,16 @@ from flask import render_template, send_from_directory, current_app, request, Re
 import os
 import re
 from flask import Blueprint
-from .extensions import db, bcrypt
+from .extensions import db, bcrypt, oauth
+
 from .models import User, Course, Lesson
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity,decode_token
 from .extensions import jwt
+from sqlalchemy import or_ # <-- AÑADE ESTE IMPORT AL INICIO DEL ARCHIVO
+from flask import url_for, redirect, session
+
+
+
 #from weasyprint import HTML, CSS
 
 # --- CONFIGURACIÓN DE IDIOMA PARA LA FECHA ---
@@ -63,7 +69,7 @@ def check_if_token_revoked(jwt_header, jwt_payload):
             # ...y el usuario existe, y el JTI del token *coincide* con el last_jti en la DB
             # (que debería haber sido escrito justo antes de esto)
             if user and user.last_jti == jti:
-                print(f"DEBUG: Token {jti} ({user_id}) dentro del período de gracia y coincide con last_jti. No revocado.")
+               
                 return False # ¡IMPORTANTE: NO revocar! Permitir el paso.
 
     # === 3. Lógica de revocación normal (si no aplica el período de gracia o no coincide) ===
@@ -143,7 +149,25 @@ def create_course():
 @main_routes.route('/courses', methods=['GET'])
 
 def get_all_courses():
-    courses = Course.query.all()
+    # 1. Obtiene el término de búsqueda de los parámetros de la URL
+    search_term = request.args.get('search', None)
+    
+    # 2. Inicia la consulta base
+    query = Course.query
+
+    # 3. Si hay un término de búsqueda, filtra la consulta
+    if search_term:
+        search_pattern = f"%{search_term}%"
+        # Filtra por título O descripción (insensible a mayúsculas/minúsculas)
+        query = query.filter(or_(
+            Course.title.ilike(search_pattern),
+            Course.description.ilike(search_pattern)
+        ))
+
+    # 4. Ejecuta la consulta final
+    courses = query.all()
+    
+    # El resto de la función permanece igual
     results = [{"id": course.id, "title": course.title, "description": course.description, "instructor_id": course.instructor_id, "image_url": course.image_url} for course in courses]
     return jsonify(results), 200
 
@@ -290,3 +314,75 @@ def serve_document(filename):
     """
     docs_dir = os.path.join(current_app.root_path, 'static', 'documents')
     return send_from_directory(docs_dir, filename)
+
+# ===================================================================
+# NUEVAS RUTAS PARA EL LOGIN CON GOOGLE
+# ===================================================================
+
+@main_routes.route('/login/google')
+def google_login():
+    """
+    Ruta para iniciar el flujo de autenticación con Google.
+    Redirige al usuario a la página de consentimiento de Google.
+    """
+    # Construye la URL de callback que Google usará para devolver al usuario.
+    # Debe coincidir exactamente con la que configuraste en la Consola de Google.
+    redirect_uri = url_for('main.google_authorize', _external=True)
+    print(f"DEBUG: Generated Redirect URI is: {redirect_uri}")
+    # Usa la librería oauth para generar y redirigir a la URL de autorización de Google.
+    return oauth.google.authorize_redirect(redirect_uri)
+
+
+# academy/routes.py
+
+# academy/routes.py
+
+@main_routes.route('/auth/google/callback')
+def google_authorize():
+    try:
+        token = oauth.google.authorize_access_token()
+        nonce = session.get('google_nonce')
+        user_info = oauth.google.parse_id_token(token, nonce=nonce)
+
+        email = user_info.get('email')
+        username = user_info.get('name')
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            user = User(
+                email=email,
+                username=username,
+                password_hash='social_login'
+            )
+            # Nota: No necesitamos db.session.add(user) aquí todavía
+            # lo haremos junto con la actualización del JTI.
+        
+        access_token = create_access_token(identity=str(user.id))
+        
+        # --- ¡AQUÍ ESTÁ LA SOLUCIÓN! ---
+        # 1. Decodificamos el token recién creado para obtener su JTI (ID único).
+        try:
+            decoded_token = decode_token(access_token)
+            new_jti = decoded_token['jti']
+        except Exception as e:
+            print(f"ERROR al decodificar token o obtener JTI: {e}")
+            return jsonify({"message": "Error interno al generar sesión"}), 500
+
+        # 2. Asignamos el nuevo JTI al usuario y guardamos en la base de datos.
+        user.last_jti = new_jti
+        db.session.add(user) 
+        db.session.commit()
+        # --- FIN DE LA SOLUCIÓN ---
+
+        frontend_url = current_app.config.get('FRONTEND_URL')
+        redirect_url = f'{frontend_url}/plataforma.html#access_token={access_token}'
+        
+        return redirect(redirect_url)
+
+    except Exception as e:
+        print("---!!! OAUTH ERROR DETECTADO !!! ---")
+        print(f"La excepción fue: {e}")
+        import traceback
+        traceback.print_exc()
+        print("---!!! FIN DEL REPORTE DE ERROR !!! ---")
+        return redirect(f"{current_app.config.get('FRONTEND_URL')}/index.html?error=google_auth_failed")
